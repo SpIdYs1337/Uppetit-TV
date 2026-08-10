@@ -57,6 +57,9 @@ data class PlaylistItem(
 
 class MainActivity : ComponentActivity() {
 
+    // Ссылка на видео-заставку по умолчанию (пока ТВ не привязан)
+    private val defaultVideoUrl = "https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4"
+
     private var secretClickCount = 0
     private var lastClickTime: Long = 0
     private val clickThreshold = 3000L
@@ -197,7 +200,17 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showStandby() {
-        runOnUiThread { infoLayer.visibility = View.VISIBLE }
+        runOnUiThread {
+            infoLayer.visibility = View.VISIBLE
+            // Запускаем фоновое видео, если плейлист пуст
+            ivContent.visibility = View.GONE
+            exoPlayer?.apply {
+                repeatMode = Player.REPEAT_MODE_ALL
+                setMediaItem(MediaItem.fromUri(defaultVideoUrl))
+                prepare()
+                play()
+            }
+        }
     }
 
     private fun hideStandby() {

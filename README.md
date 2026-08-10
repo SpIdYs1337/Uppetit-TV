@@ -22,8 +22,9 @@
 ---
 
 ## 📦 Как настроить и собрать проект
-1.  **Настройка сервера:** Откройте файл `app/src/main/java/com/example/evavisionapp/MainActivity.kt`. Найдите функцию `connectWebSocket` (примерно 200-я строка) и замените тестовый адрес `wss://ws.postman-echo.com/raw` на ваш рабочий адрес WebSocket-сервера.
-2.  **Сборка APK:** В Android Studio: `Build -> Build Bundle(s) / APK(s) -> Build APK(s)`.
+1.  **Настройка сервера:** Откройте файл `app/src/main/java/com/example/evavisionapp/MainActivity.kt`. Найдите функцию `connectWebSocket` (примерно 230-я строка) и замените тестовый адрес `wss://ws.postman-echo.com/raw` на ваш рабочий адрес WebSocket-сервера.
+2.  **Настройка фонового видео:** В том же файле найдите переменную `defaultVideoUrl` (в начале класса) и укажите ссылку на видео, которое должно проигрываться на фоне экрана ожидания (где отображается ID).
+3.  **Сборка APK:** В Android Studio: `Build -> Build Bundle(s) / APK(s) -> Build APK(s)`.
 
 ---
 
