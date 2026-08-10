@@ -69,6 +69,9 @@ class MainActivity : ComponentActivity() {
 
     private val client = OkHttpClient()
     private var webSocket: WebSocket? = null
+    private var isConnected = false
+    private val reconnectHandler = Handler(Looper.getMainLooper())
+    private var lastTelemetry: JSONObject? = null
 
     private var exoPlayer: ExoPlayer? = null
     private lateinit var ivContent: ImageView
@@ -398,6 +401,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun connectWebSocket(telemetry: JSONObject) {
+        lastTelemetry = telemetry
         val request = Request.Builder().url("wss://ws.postman-echo.com/raw").build()
 
         webSocket = client.newWebSocket(
@@ -406,6 +410,8 @@ class MainActivity : ComponentActivity() {
 
                 override fun onOpen(webSocket: WebSocket, response: Response) {
                     Log.d("UPPETIT_NETWORK", "✅ Соединение с сервером УСТАНОВЛЕНО!")
+                    isConnected = true
+                    reconnectHandler.removeCallbacksAndMessages(null)
                     webSocket.send(telemetry.toString())
                 }
 
@@ -415,14 +421,25 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-                    webSocket.close(1000, null)
                     Log.d("UPPETIT_NETWORK", "⚠️ Соединение закрывается: $reason")
+                    isConnected = false
+                    scheduleReconnect()
                 }
 
                 override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                     Log.e("UPPETIT_NETWORK", "❌ Ошибка соединения: ${t.message}")
+                    isConnected = false
+                    scheduleReconnect()
                 }
             })
+    }
+
+    private fun scheduleReconnect() {
+        reconnectHandler.removeCallbacksAndMessages(null)
+        reconnectHandler.postDelayed({
+            Log.d("UPPETIT_NETWORK", "🔄 Попытка переподключения...")
+            lastTelemetry?.let { connectWebSocket(it) }
+        }, 10000) // Пробуем каждые 10 секунд
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
