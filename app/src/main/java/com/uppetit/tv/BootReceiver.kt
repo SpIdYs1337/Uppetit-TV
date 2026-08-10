@@ -1,4 +1,4 @@
-package com.example.evavisionapp
+package com.uppetit.tv
 
 import android.content.BroadcastReceiver
 import android.content.Context

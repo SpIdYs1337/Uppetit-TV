@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.evavisionapp"
+    namespace = "com.uppetit.tv"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.evavisionapp"
+        applicationId = "com.uppetit.tv"
         minSdk = 29
         targetSdk = 35
         versionCode = 1

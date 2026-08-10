@@ -1,4 +1,4 @@
-package com.example.evavisionapp.ui.theme
+package com.uppetit.tv.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
