@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">EvaVisionApp</string>
+    <string name="uppetit">Логотип UPPETIT</string>
+    <string name="generation">ГЕНЕРАЦИЯ...</string>
+    <string name="idType">Введите этот ID в веб-интерфейсе для привязки экрана:</string>
+</resources>

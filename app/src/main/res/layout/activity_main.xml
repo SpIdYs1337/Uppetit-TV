@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1117">
+
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:use_controller="false"
+        app:resize_mode="fill"
+        app:surface_type="texture_view" />
+
+    <ImageView
+        android:id="@+id/ivContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:contentDescription="Контент (фото)"/>
+
+    <LinearLayout
+        android:id="@+id/infoLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#E60D1117">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="56dp"
+            android:contentDescription="@string/uppetit"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/idType"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif"
+            android:textColor="#8B949E"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvDeviceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/generation"
+            android:textSize="44sp"
+            android:textColor="#FFB300"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:fontFamily="sans-serif-medium"/>
+
+    </LinearLayout>
+</FrameLayout>
