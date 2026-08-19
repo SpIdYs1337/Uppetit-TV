@@ -434,7 +434,7 @@ class MainActivity : ComponentActivity() {
 
     private fun connectWebSocket(telemetry: JSONObject) {
         lastTelemetry = telemetry
-        val request = Request.Builder().url("ws://192.68.1.42:3001").build()
+        val request = Request.Builder().url("ws://192.168.1.42:3001").build()
 
         webSocket = client.newWebSocket(
             request,
