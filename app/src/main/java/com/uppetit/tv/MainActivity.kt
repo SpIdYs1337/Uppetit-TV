@@ -229,11 +229,12 @@ class MainActivity : ComponentActivity() {
                     updatePlaylist(items)
                 }
                 "SCREENSHOT" -> takeScreenshot()
-                "REBOOT" -> rebootApp()
+                "REBOOT" -> restartApp()
                 "OTA_UPDATE" -> {
                     val url = data.getString("url")
                     startOtaUpdate(url)
                 }
+                "UNPAIR_DEVICE" -> unpairDevice()
             }
         } catch (e: Exception) {
             Log.e("UPPETIT_CMD", "Ошибка команды: ${e.message}")
@@ -370,6 +371,44 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun unpairDevice() {
+        runOnUiThread {
+            Log.d("UPPETIT_UNPAIR", "⚠️ Получена команда на отвязку устройства")
+
+            // 1. Очистка ID и Секрета
+            val sharedPreferences = getSharedPreferences("EvaVisionPrefs", MODE_PRIVATE)
+            sharedPreferences.edit(commit = true) {
+                remove("SHORT_DEVICE_ID")
+                remove("DEVICE_SECRET")
+            }
+
+            // 2. Очистка кэша медиа
+            clearMediaCache()
+
+            // 3. Перезапуск
+            restartApp()
+        }
+    }
+
+    private fun clearMediaCache() {
+        try {
+            val dir = File(getExternalFilesDir(null), "content")
+            if (dir.exists()) {
+                dir.deleteRecursively()
+                Log.d("UPPETIT_CLEANUP", "Кэш медиа полностью очищен")
+            }
+        } catch (e: Exception) {
+            Log.e("UPPETIT_CLEANUP", "Ошибка при очистке кэша: ${e.message}")
+        }
+    }
+
+    private fun restartApp() {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
+    }
+
     private fun takeScreenshot() {
         runOnUiThread {
             try {
@@ -393,16 +432,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun rebootApp() {
-        val intent = packageManager.getLaunchIntentForPackage(packageName)
-        intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
-        Runtime.getRuntime().exit(0)
-    }
-
     private fun connectWebSocket(telemetry: JSONObject) {
         lastTelemetry = telemetry
-        val request = Request.Builder().url("wss://ws.postman-echo.com/raw").build()
+        val request = Request.Builder().url("ws://192.68.1.42:3001").build()
 
         webSocket = client.newWebSocket(
             request,
